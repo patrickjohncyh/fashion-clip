@@ -1,4 +1,3 @@
-CLIP @ git+https://github.com/openai/CLIP.git@c0065a27ad170a67d9572f693292b594982ab9b2
 torch==1.11.0
 boto3==1.10.50
 appdirs==1.4.4
@@ -11,3 +10,5 @@ millify==0.1.1
 annoy==1.17.0
 dash==2.3.1
 kaleido==0.2.1
+transformers==4.26.1
+ipyplot
