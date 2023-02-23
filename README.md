@@ -2,24 +2,31 @@
 
 __NB: Repo is still WIP!__
 
+__Update, 23/02/23__: We are now on Hugging Face! The model will _soon_ be available [here](https://huggingface.co/patrickjohncyh/fashion-clip).
+
+__Update, 23/01/23__: We are now on [Nature Scientific Reports](https://www.nature.com/articles/s41598-022-23052-9)!
+
+
 We are awaiting the official release of the Farfetch dataset, upon which fine-tuned model weights,
-pre-processed image and text vectors will be made public. In the meanwhile, you
-can use the model weights from the original `CLIP` [repo](https://github.com/openai/CLIP) 
-by following the same model naming convention (i.e. `fclip = FashionCLIP('ViT-B/32', ... )`) or load
-your own weights (i.e. `fclip = FashionCLIP('path/to/local/weights.pt', ... )`). See below for further
-details!
+pre-processed image and text vectors will be made public. In the meanwhile, we currently use the 
+[Hugging Face](https://huggingface.co/) implementation of `CLIP` and can use the model weights
+from [OpenAI](https://huggingface.co/openai/clip-vit-base-patch32) by following the standard hugginface 
+naming convention (i.e. `fclip = FashionCLIP('<username>/<repo_name>', ... )`). We also support private
+repositories (i.e. `fclip = FashionCLIP('<username>/<repo_name>', auth_token=<AUTH_TOKEN>, ... )`). 
+
+See below for further details!
 
 ## Overview
 
 `FashionCLIP` is a CLIP-like model fine-tuned for the fashion industry. We fine tune 
-`CLIP` ([Radford et al., 2021](https://arxiv.org/abs/2103.00020])) on over 700K 
+`CLIP` ([Radford et al., 2021](https://www.nature.com/articles/s41598-022-23052-9) on over 700K 
 <image, text> pairs from the Farfetch dataset[^1].
 
 We evaluate FashionCLIP by applying it to open problems in industry such as retrieval, classification
 and fashion parsing. Our results demonstrate that fine-tuning helps capture domain-specific concepts 
 and generalizes them in zero-shot scenarios. We also supplement quantitative tests with qualitative analyses, 
 and offer preliminary insights into how concepts grounded in a visual space unlocks linguistic generalization. 
-Please see our [paper](https://arxiv.org/abs/2204.03972) for more details.
+Please see our [paper](https://www.nature.com/articles/s41598-022-23052-9) for more details.
 
 In this repository, you will find an API for interacting with `FashionCLIP` and an interactive demo built using [streamlit](https://streamlit.io/) (coming soon!) 
  which showcases the capabilities of `FashionCLIP`.
@@ -85,9 +92,9 @@ dataset = FCLIPDataset(name='my_dataset',
                        catalog=my_catalog)
 ```
 
-The second abstraction is the __`FashionCLIP`__ class, which takes in a CLIP-like model and an `FCLIPDataset`
-and provides methods to perform tasks such as multi-modal retrieval, zero-shot classification and localization.
-The initialization parameters for `FashionCLIP` are as follows:
+The second abstraction is the __`FashionCLIP`__ class, which takes in a Hugging Face CLIP model name and 
+an `FCLIPDataset`, and provides convenient functions to perform tasks such as multi-modal retrieval, 
+zero-shot classification and localization. The initialization parameters for `FashionCLIP` are as follows:
 
 ```
 model_name: str -> Name of model OR path to local model
@@ -96,9 +103,10 @@ normalize: bool -> option to convert embeddings to unit norm
 approx: bool -> option to use approximate nearest neighbors
 ```
 
-Similar to the `FCLIPDataset` abstraction, we have included a pre-trained `FashionCLIP` model from the paper. 
-If an unknown dataset and model combination is received, the image and caption vectors will be generated 
-upon instantiation, otherwise pre-computed vectors/embeddings will be pulled from S3.
+Similar to the `FCLIPDataset` abstraction, we have included a pre-trained `FashionCLIP` model from the paper, hosted
+[here](https://huggingface.co/patrickjohncyh/fashion-clip). If an unknown dataset and model combination is received, 
+the image and caption vectors will be generated upon object instantiation, otherwise pre-computed vectors/embeddings will 
+be pulled from S3.
 
 ```
 from fashion_clip import FCLIPDataset, FashionCLIP
