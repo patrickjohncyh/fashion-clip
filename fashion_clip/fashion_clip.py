@@ -5,7 +5,7 @@ import numpy as np
 from tqdm import tqdm
 from typing import List, Union, Tuple
 from torch.utils.data import DataLoader
-from fashion_clip.utils import get_cache_directory
+from fashion_clip.utils import get_cache_directory, _is_hugging_face_repo, _model_processor_hash
 from fashion_clip.model_utils import ImageDataset, CaptioningDataset
 from fashion_clip.utils import _download, file_sha256, display_images_from_s3, display_images_from_url, display_images
 import fashion_clip.attention_map as attention_map
@@ -15,9 +15,11 @@ import random
 from annoy import AnnoyIndex
 import time
 import json
+import validators
+from transformers import CLIPModel, CLIPProcessor
 
 _MODELS = {
-    "FCLIP": "s3://fashion-clip-internal-k1q9ahssz8dr4b0mn3on/models/0a61c5023f8b30bee944a3fee22b9d9d5a5fe3008043fbe8823c8411ca8e0b80/fashion-clip-ff-model.pt",
+    "fashion-clip": "patrickjohncyh/fashion-clip",
 }
 _CATALOGS = {
     "FF": "s3://fashion-clip-internal-k1q9ahssz8dr4b0mn3on/catalogs/8721deef0bae2bef9a40703ccc7d931eb353fccc7ff3245a2647491cc8202761/ff_catalog.json",
@@ -104,10 +106,10 @@ class FashionCLIP:
     Need a reliable method of determining if pre-processed version exists -- use hash of the dataset_model?
     """
 
-    def __init__(self, model_name, dataset: FCLIPDataset = None, normalize=True, approx=True):
+    def __init__(self, model_name, dataset: FCLIPDataset = None, normalize=True, approx=True, auth_token=None):
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
         self.model_name = model_name
-        self.model, self.preprocess, self.model_hash = self._load_model(model_name)
+        self.model, self.preprocess, self.model_hash = self._load_model(model_name, auth_token=auth_token)
         self.dataset = dataset
         self.dataset_hash = self.dataset.hash()
         self.vector_hash = "_".join([self.model_hash, self.dataset_hash])
@@ -147,18 +149,31 @@ class FashionCLIP:
         # TODO: Implement some sort of caching mechanism?
         return image_vectors, textual_vectors
 
-    def _load_model(self, name: str, device: Union[str, torch.device] = "cuda" if torch.cuda.is_available() else "cpu"):
-        if name in _MODELS:
-            model_path = _download(_MODELS[name], _CACHE_DIR)
-        elif os.path.isfile(name):
-            model_path = name
-        elif name in clip.available_models():
-            model_path = clip.clip._download(clip.clip._MODELS[name], root=_CACHE_DIR)
-            print(model_path)
+    def _load_model(self,
+                    name: str,
+                    device: Union[str, torch.device] = "cuda" if torch.cuda.is_available() else "cpu",
+                    auth_token = None):
+        # model is one of know HF models
+        if name in _MODELS or _is_hugging_face_repo(name, auth_token):
+            # if using know short-hand, extract from dict
+            name = _MODELS[name] if name in _MODELS else name
+            model = CLIPModel.from_pretrained(name, use_auth_token=auth_token)
+            preprocessing = CLIPProcessor.from_pretrained(name, use_auth_token=auth_token)
+            hash = _model_processor_hash(name, model, preprocessing)
+        # else it doesn't use HF, assume using OpenAI CLiP
         else:
-            raise RuntimeError(f"Model {name} not found; available models = {list(_MODELS.keys())}")
-        model, preprocessing = clip.load(model_path, device=device, download_root=_CACHE_DIR)
-        return model, preprocessing, file_sha256(model_path)
+            if os.path.isfile(name):
+                model_path = name
+            elif validators.url(name):
+                # generic url or S3 path
+                model_path = _download(_MODELS[name], _CACHE_DIR)
+            else:
+                raise RuntimeError(f"Model {name} not found or not valid; available models = {list(_MODELS.keys())}")
+
+            model, preprocessing = clip.load(model_path, device=device, download_root=_CACHE_DIR)
+            hash = file_sha256(model_path)
+
+        return model, preprocessing, hash
 
     def encode_images(self, images: Union[List[str], List[Image.Image]], batch_size: int):
         if isinstance(images[0], str):

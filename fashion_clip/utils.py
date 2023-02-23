@@ -11,10 +11,15 @@ from urllib.request import urlretrieve
 import hashlib
 from typing import List
 
+HUGGING_FACE_REPO_URL = "https://huggingface.co/api/repos/{}/{}"
+
 def file_sha256(file_path: str):
     return hashlib.sha256(open(file_path, "rb").read()).hexdigest()
 
 
+def _model_processor_hash(name, model, processor)->str:
+    # TODO: Figure out how to get the right hashes, that is, we care about the model (and processor) weights/config and not their commit per se
+    return model.config._commit_hash
 def get_cache_directory():
     """
     Returns the cache directory on the system
@@ -26,6 +31,19 @@ def get_cache_directory():
     Path(cache_dir).mkdir(parents=True, exist_ok=True)
 
     return cache_dir
+
+
+def _is_hugging_face_repo(path, api_token=None)->bool:
+    try:
+        username, repo_name = path.split('/')
+    except:
+        return False
+
+    url = HUGGING_FACE_REPO_URL.format(username, repo_name)
+    headers = {"Authorization": "Bearer {}".format(api_token)} if api_token else {}
+    response = requests.get(url, headers=headers)
+    print(url, api_token)
+    return response.status_code == 200
 
 def _download(url, destination):
     """
