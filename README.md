@@ -39,7 +39,7 @@ In this repository, you will find an API for interacting with `FashionCLIP` and 
 
 ### Pre-requisites 
 
-To access the private bucket necessary to retrieve model weights and dataset, be sure to include an `.env` 
+To access the private bucket necessary to retrieve dataset and pre-computed embeddings, be sure to include an `.env` 
 file containing the following:
 
 ```
