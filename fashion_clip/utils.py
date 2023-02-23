@@ -42,7 +42,6 @@ def _is_hugging_face_repo(path, api_token=None)->bool:
     url = HUGGING_FACE_REPO_URL.format(username, repo_name)
     headers = {"Authorization": "Bearer {}".format(api_token)} if api_token else {}
     response = requests.get(url, headers=headers)
-    print(url, api_token)
     return response.status_code == 200
 
 def _download(url, destination):

@@ -9,7 +9,7 @@ from fashion_clip.utils import get_cache_directory, _is_hugging_face_repo, _mode
 from fashion_clip.model_utils import ImageDataset, CaptioningDataset
 from fashion_clip.utils import _download, file_sha256, display_images_from_s3, display_images_from_url, display_images
 import fashion_clip.attention_map as attention_map
-from PIL import Image
+import PIL
 import hashlib
 import random
 from annoy import AnnoyIndex
@@ -17,6 +17,7 @@ import time
 import json
 import validators
 from transformers import CLIPModel, CLIPProcessor
+from datasets import Dataset, Image
 
 _MODELS = {
     "fashion-clip": "patrickjohncyh/fashion-clip",
@@ -160,6 +161,7 @@ class FashionCLIP:
             model = CLIPModel.from_pretrained(name, use_auth_token=auth_token)
             preprocessing = CLIPProcessor.from_pretrained(name, use_auth_token=auth_token)
             hash = _model_processor_hash(name, model, preprocessing)
+
         # else it doesn't use HF, assume using OpenAI CLiP
         else:
             if os.path.isfile(name):
@@ -175,35 +177,40 @@ class FashionCLIP:
 
         return model, preprocessing, hash
 
-    def encode_images(self, images: Union[List[str], List[Image.Image]], batch_size: int):
-        if isinstance(images[0], str):
-            dataset = ImageDataset.from_path(images, self.preprocess)
-        else:
-            dataset = ImageDataset(images, self.preprocess)
+    def encode_images(self, images: Union[List[str], List[PIL.Image.Image]], batch_size: int):
+        dataset = Dataset.from_dict({'image': images})
+        dataset = dataset.cast_column('image',Image()) if isinstance(images[0], str) else dataset
+        dataset = dataset.map(lambda el : self.preprocess(images=el['image'], return_tensors='pt'),
+                    batched=True,
+                    remove_columns=['image'])
+        dataset.set_format('torch')
         dataloader = DataLoader(dataset, batch_size=batch_size)
         image_embeddings = []
         pbar = tqdm(total=len(images) // batch_size, position=0)
         with torch.no_grad():
-            for im in dataloader:
-                im = im.to(self.device)
-                image_embeddings.extend(self.model.encode_image(im).detach().cpu().numpy())
+            for batch in dataloader:
+                batch = {k:v.to(self.device) for k,v in batch.items()}
+                image_embeddings.extend(self.model.get_image_features(**batch).detach().cpu().numpy())
                 pbar.update(1)
             pbar.close()
-        return np.array(image_embeddings)
+        return np.stack(image_embeddings)
 
     def encode_text(self, text: List[str], batch_size: int):
-        dataset = CaptioningDataset(text)
+        dataset = Dataset.from_dict({'text': text})
+        dataset = dataset.map(lambda el: self.preprocess(text=el['text'], return_tensors="pt", padding=True),
+                              batched=True,
+                              remove_columns=['text'])
+        dataset.set_format('torch')
         dataloader = DataLoader(dataset, batch_size=batch_size)
         text_embeddings = []
         pbar = tqdm(total=len(text) // batch_size, position=0)
         with torch.no_grad():
-            for captions in dataloader:
-                # convert text to indices
-                idx = clip.tokenize(captions, truncate=True).to(self.device)
-                text_embeddings.extend(self.model.encode_text(idx).detach().cpu().numpy())
+            for batch in dataloader:
+                batch = {k: v.to(self.device) for k, v in batch.items()}
+                text_embeddings.extend(self.model.get_text_features(**batch).detach().cpu().numpy())
                 pbar.update(1)
             pbar.close()
-        return np.array(text_embeddings)
+        return np.stack(text_embeddings)
 
     def _cosine_similarity(self, key_vectors: np.ndarray, space_vectors: np.ndarray, normalize=True):
         if normalize:
@@ -233,7 +240,6 @@ class FashionCLIP:
             print('Elapsed Time: {}s'.format(t2-t1))
 
         return nn
-
 
     def zero_shot_classification(self, images, text_labels: List[str], debug=False):
         """
@@ -268,7 +274,6 @@ class FashionCLIP:
     def display_attention(self, image_path, query_text, pixel_size=15, iterations=5):
         heatmap, image = self._get_heatmap(image_path, query_text, pixel_size, iterations)
         attention_map.display_heatmap(image, query_text, heatmap)
-
 
     def _get_heatmap(self, image_path, text, pixel_size, iterations):
         images, masks = attention_map.generate_image_crops(image_path, pixel_size=pixel_size)
