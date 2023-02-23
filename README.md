@@ -2,7 +2,7 @@
 
 __NB: Repo is still WIP!__
 
-We are awaiting the release of the fashion dataset, upon which model weights,
+We are awaiting the official release of the Farfetch dataset, upon which fine-tuned model weights,
 pre-processed image and text vectors will be made public. In the meanwhile, you
 can use the model weights from the original `CLIP` [repo](https://github.com/openai/CLIP) 
 by following the same model naming convention (i.e. `fclip = FashionCLIP('ViT-B/32', ... )`) or load
@@ -13,16 +13,16 @@ details!
 
 `FashionCLIP` is a CLIP-like model fine-tuned for the fashion industry. We fine tune 
 `CLIP` ([Radford et al., 2021](https://arxiv.org/abs/2103.00020])) on over 700K 
-<image, text> pairs from an open source fashion catalog[^1].
+<image, text> pairs from the Farfetch dataset[^1].
 
-We evaluate FashionCLIP by applying it to open problems in industry such as retrieval, classificaiton,
+We evaluate FashionCLIP by applying it to open problems in industry such as retrieval, classification
 and fashion parsing. Our results demonstrate that fine-tuning helps capture domain-specific concepts 
-and generalize them in zero-shot scenarios. We also supplement quantitative tests with qualitative analyses, 
+and generalizes them in zero-shot scenarios. We also supplement quantitative tests with qualitative analyses, 
 and offer preliminary insights into how concepts grounded in a visual space unlocks linguistic generalization. 
 Please see our [paper](https://arxiv.org/abs/2204.03972) for more details.
 
-In this repository, you will find an API for interacting with `FashionCLIP` and an interactive demo (coming soon!) 
- show casing the capabilities of `FashionCLIP` built using [streamlit](https://streamlit.io/).
+In this repository, you will find an API for interacting with `FashionCLIP` and an interactive demo built using [streamlit](https://streamlit.io/) (coming soon!) 
+ which showcases the capabilities of `FashionCLIP`.
 
 
 [^1]: Pending official release.
@@ -63,8 +63,8 @@ image_source_type: str -> type of source (i.e. local or s3)
 catalog: List[dict] = None -> list of dicts containing at miniumum the keys ['id', 'image', 'caption']
 ```
 
-For ease of use, we also provide access to the catalog used in the paper for training `FahionCLIP` 
-(_once it is made public_) by simply specifying the corresponding catalog name.
+For ease of use, the API also provides access to the dataset (_once it is officialy released_), used in the paper 
+for training `FahionCLIP`, by simply specifying the corresponding catalog name.
 
 #### Pre-Included Dataset
 ```
@@ -105,7 +105,7 @@ from fashion_clip import FCLIPDataset, FashionCLIP
 dataset = FCLIPDataset(name='FF', 
                        image_source_path='path/to/images', 
                        image_source_type='local')
-fclip = FashionCLIP('FCLIP', ff_dataset)
+fclip = FashionCLIP('fasihon-clip', ff_dataset)
 ```
 
 For further details on how to use the package, refer to the accompanying notebook!
