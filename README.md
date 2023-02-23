@@ -131,7 +131,7 @@ $ cd app
 $ streamlit run app.py
 ```
 
-### Citation
+## Citation
 ```
 @Article{Chia2022,
     title="Contrastive language and vision learning of general fashion concepts",
