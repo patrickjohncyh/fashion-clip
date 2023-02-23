@@ -11,7 +11,7 @@ from urllib.request import urlretrieve
 import hashlib
 from typing import List
 
-HUGGING_FACE_REPO_URL = "https://huggingface.co/api/repos/{}/{}"
+HUGGING_FACE_REPO_URL = "https://huggingface.co/{}/{}"
 
 def file_sha256(file_path: str):
     return hashlib.sha256(open(file_path, "rb").read()).hexdigest()
@@ -38,6 +38,7 @@ def _is_hugging_face_repo(path, api_token=None)->bool:
         username, repo_name = path.split('/')
     except:
         return False
+    print(username, repo_name)
 
     url = HUGGING_FACE_REPO_URL.format(username, repo_name)
     headers = {"Authorization": "Bearer {}".format(api_token)} if api_token else {}
