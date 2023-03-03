@@ -2,6 +2,8 @@
 
 __NB: Repo is still WIP!__
 
+__Update, 03/03/23__: We are now on [Hugging Face]((https://huggingface.co/patrickjohncyh/fashion-clip))!
+
 __Update, 23/02/23__: We are now on Hugging Face! The model will _soon_ be available [here](https://huggingface.co/patrickjohncyh/fashion-clip).
 
 __Update, 23/01/23__: We are now on [Nature Scientific Reports](https://www.nature.com/articles/s41598-022-23052-9)!
