@@ -6,7 +6,6 @@ from tqdm import tqdm
 from typing import List, Union, Tuple
 from torch.utils.data import DataLoader
 from fashion_clip.utils import get_cache_directory, _is_hugging_face_repo, _model_processor_hash
-from fashion_clip.model_utils import ImageDataset, CaptioningDataset
 from fashion_clip.utils import _download, file_sha256, display_images_from_s3, display_images_from_url, display_images
 import fashion_clip.attention_map as attention_map
 import PIL
