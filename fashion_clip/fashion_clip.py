@@ -68,9 +68,6 @@ class FCLIPDataset:
         elif image_source_type == 'URL':
             self._display_images = display_images_from_url
 
-
-
-
     def display_products(self, ids: List[str], fields: Tuple[str] = ('id', 'short_description'), **kwargs):
         idxs = [self.id_to_idx[id] for id in ids]
         im_paths = list(self.images_path[idxs])
@@ -198,7 +195,8 @@ class FashionCLIP:
 
     def encode_text(self, text: List[str], batch_size: int):
         dataset = Dataset.from_dict({'text': text})
-        dataset = dataset.map(lambda el: self.preprocess(text=el['text'], return_tensors="pt", padding=True),
+        dataset = dataset.map(lambda el: self.preprocess(text=el['text'], return_tensors="pt",
+                                                         padding=True, truncation=True),
                               batched=True,
                               remove_columns=['text'])
         dataset.set_format('torch')
