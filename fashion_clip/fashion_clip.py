@@ -196,7 +196,7 @@ class FashionCLIP:
     def encode_text(self, text: List[str], batch_size: int):
         dataset = Dataset.from_dict({'text': text})
         dataset = dataset.map(lambda el: self.preprocess(text=el['text'], return_tensors="pt",
-                                                         padding="longest", truncation=True),
+                                                         max_length=77, padding="max_length", truncation=True),
                               batched=True,
                               remove_columns=['text'])
         dataset.set_format('torch')
