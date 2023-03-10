@@ -1,12 +1,13 @@
-# `FashionCLIP`
+# FashionCLIP
 
-__NB: Repo is still WIP!__
+[![Youtube Video](https://img.shields.io/badge/youtube-video-red)](https://www.youtube.com/watch?v=uqRSc-KSA1Y)
+[![HuggingFace Model](https://img.shields.io/badge/HF%20Model-Weights-yellow)](https://huggingface.co/patrickjohncyh/fashion-clip)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1n--D_CBPEEO7fCcebHIxbbY4dr5incaD?usp=sharing)
+[![Medium Blog Post](https://raw.githubusercontent.com/aleen42/badges/master/src/medium.svg)](https://towardsdatascience.com/teaching-clip-some-fashion-3005ac3fdcc3)
 
-__Update, 03/03/23__: We are now on [Hugging Face]((https://huggingface.co/patrickjohncyh/fashion-clip))!
+We are now on Hugging Face! The model will is available [here](https://huggingface.co/patrickjohncyh/fashion-clip).
 
-__Update, 23/02/23__: We are now on Hugging Face! The model will _soon_ be available [here](https://huggingface.co/patrickjohncyh/fashion-clip).
-
-__Update, 23/01/23__: We are now on [Nature Scientific Reports](https://www.nature.com/articles/s41598-022-23052-9)!
+We are now on [Nature Scientific Reports](https://www.nature.com/articles/s41598-022-23052-9)!
 
 
 We are awaiting the official release of the Farfetch dataset, upon which fine-tuned model weights,
