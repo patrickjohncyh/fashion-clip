@@ -5,6 +5,18 @@
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1n--D_CBPEEO7fCcebHIxbbY4dr5incaD?usp=sharing)
 [![Medium Blog Post](https://raw.githubusercontent.com/aleen42/badges/master/src/medium.svg)](https://towardsdatascience.com/teaching-clip-some-fashion-3005ac3fdcc3)
 
+UPDATE (10/03/23): We have updated the model! We found that [laion/CLIP-ViT-B-32-laion2B-s34B-b79K](https://huggingface.co/laion/CLIP-ViT-B-32-laion2B-s34B-b79K) checkpoint (thanks [Bin](https://www.linkedin.com/in/bin-duan-56205310/)!) worked better than original OpenAI CLIP on Fashion. We thus fine-tune a newer (and better!) version of FashionCLIP (henceforth FashionCLIP 2.0), while keeping the architecture the same. We postulate that the perofrmance gains afforded by `laion/CLIP-ViT-B-32-laion2B-s34B-b79K` are due to the increased training data (5x OpenAI CLIP data). Our [thesis](https://www.nature.com/articles/s41598-022-23052-9), however, remains the same -- fine-tuning `laion/CLIP` on our fashion dataset improved zero-shot perofrmance across our benchmarks. See the below table comparing weighted macro F1 score across models.
+`
+
+| Model             | FMNIST        | KAGL          | DEEP          | 
+| -------------     | ------------- | ------------- | ------------- |
+| OpenAI CLIP       | 0.66          | 0.63          | 0.45          |
+| FashionCLIP       | 0.74          | 0.67          | 0.48          |
+| Laion CLIP        | 0.78          | 0.71          | 0.58          |
+| FashionCLIP 2.0   | __0.83__          | __0.73__          | __0.62__          |
+
+---
+
 We are now on Hugging Face! The model will is available [here](https://huggingface.co/patrickjohncyh/fashion-clip).
 
 We are now on [Nature Scientific Reports](https://www.nature.com/articles/s41598-022-23052-9)!
