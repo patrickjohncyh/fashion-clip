@@ -177,12 +177,17 @@ class FashionCLIP:
         return model, preprocessing, hash
 
     def encode_images(self, images: Union[List[str], List[PIL.Image.Image]], batch_size: int):
+        def transform_fn(el):
+             imgs = el['image'] if isinstance(el['image'][0], PIL.Image.Image) else [Image().decode_example(_) for _ in el['image']] 
+             return self.preprocess(images=imgs, return_tensors='pt')
+            
         dataset = Dataset.from_dict({'image': images})
-        dataset = dataset.cast_column('image',Image()) if isinstance(images[0], str) else dataset
-        dataset = dataset.map(lambda el : self.preprocess(images=el['image'], return_tensors='pt'),
-                    batched=True,
-                    remove_columns=['image'])
+        dataset = dataset.cast_column('image',Image(decode=False)) if isinstance(images[0], str) else dataset        
+        # dataset = dataset.map(map_fn,
+        #             batched=True,
+        #             remove_columns=['image'])
         dataset.set_format('torch')
+        dataset.set_transform(transform_fn)
         dataloader = DataLoader(dataset, batch_size=batch_size)
         image_embeddings = []
         pbar = tqdm(total=len(images) // batch_size, position=0)
