@@ -62,6 +62,29 @@ AWS_ACCESS_KEY_ID
 AWS_SECRET_KEY
 ```
 
+### HF API
+
+```python
+
+from PIL import Image
+import requests
+from transformers import CLIPProcessor, CLIPModel
+
+model = CLIPModel.from_pretrained("patrickjohncyh/fashion-clip")
+processor = CLIPProcessor.from_pretrained("patrickjohncyh/fashion-clip")
+
+image = Image.open("images/image1.jpg")
+
+inputs = processor(text=["a photo of a red shoe", "a photo of a black shoe"],
+                   images=image, return_tensors="pt", padding=True)
+
+outputs = model(**inputs)
+logits_per_image = outputs.logits_per_image  # this is the image-text similarity score
+probs = logits_per_image.softmax(dim=1)  
+print(probs)
+image.resize((224, 224))
+```
+
 ### FashionCLIP API
 
 #### Installation
@@ -70,7 +93,6 @@ From project root, install the `fashion-clip` package locally with
 $ pip install -e . 
 ```
 
-#### Usage
 
 There are two main abstractions to facilitate easy use of `FashionCLIP`.
 
