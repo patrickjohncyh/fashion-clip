@@ -80,15 +80,12 @@ In this repository, you will find an API for interacting with `FashionCLIP` and 
 
 ## API & Demo
 
-### Pre-requisites 
 
-To access the private bucket necessary to retrieve dataset and pre-computed embeddings, be sure to include an `.env` 
-file containing the following:
+### Quick How To
 
-```
-AWS_ACCESS_KEY_ID
-AWS_SECRET_KEY
-```
+Need a quick way to generate embeddings? do you want to test retrieval performance?
+
+Use our [colab](https://colab.research.google.com/drive/1Z1hAxBnWjF76bEi9KQ6CMBBEmI_FVDrW?usp=sharing) notebook!
 
 ### HF API
 
