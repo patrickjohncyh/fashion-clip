@@ -17,7 +17,7 @@ UPDATE (10/03/23): We have updated the model! We found that [laion/CLIP-ViT-B-32
 
 ---
 
-We are now on Hugging Face! The model will is available [here](https://huggingface.co/patrickjohncyh/fashion-clip).
+We are now on Hugging Face! The model is available [here](https://huggingface.co/patrickjohncyh/fashion-clip).
 
 We are now on [Nature Scientific Reports](https://www.nature.com/articles/s41598-022-23052-9)!
 
