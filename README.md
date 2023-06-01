@@ -83,9 +83,33 @@ In this repository, you will find an API for interacting with `FashionCLIP` and 
 
 ### Quick How To
 
-Need a quick way to generate embeddings? do you want to test retrieval performance?
+Need a quick way to generate embeddings? do you want to test retrieval performance? 
 
-Use our [colab](https://colab.research.google.com/drive/1Z1hAxBnWjF76bEi9KQ6CMBBEmI_FVDrW?usp=sharing) notebook!
+First of all, you should be able to quickly install this using pip.
+
+```
+$ pip install fashion-clip 
+```
+
+If you have lists of texts and image paths, it is very easy to generate embeddings:
+
+```python
+
+from fashion_clip.fashion_clip import FashionCLIP
+
+fclip = FashionCLIP('fashion-clip')
+
+# we create image embeddings and text embeddings
+image_embeddings = fclip.encode_images(images, batch_size=32)
+text_embeddings = fclip.encode_text(texts, batch_size=32)
+
+# we normalize the embeddings to unit norm (so that we can use dot product instead of cosine similarity to do comparisons)
+image_embeddings = image_embeddings/np.linalg.norm(image_embeddings, ord=2, axis=-1, keepdims=True)
+text_embeddings = text_embeddings/np.linalg.norm(text_embeddings, ord=2, axis=-1, keepdims=True)
+```
+
+**Use our [colab](https://colab.research.google.com/drive/1Z1hAxBnWjF76bEi9KQ6CMBBEmI_FVDrW?usp=sharing)** notebook to see more functionalities.
+
 
 ### HF API
 
@@ -110,7 +134,7 @@ print(probs)
 image.resize((224, 224))
 ```
 
-### FashionCLIP API
+### Additional Internal FashionCLIP API
 
 #### Installation
 From project root, install the `fashion-clip` package locally with 
