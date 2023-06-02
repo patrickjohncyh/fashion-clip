@@ -204,17 +204,3 @@ fclip = FashionCLIP('fasihon-clip', ff_dataset)
 
 For further details on how to use the package, refer to the accompanying notebook!
 
-### FashionCLIP Demo
-
-The demo is built using streamlit, with further instructions and explanations included
-inside.
-
-Running the app requires access to the dataset/fine-tuned model. Stay tuned for more updates!
-
-#### How to run
-```
-$ cd app
-$ streamlit run app.py
-```
-
-
