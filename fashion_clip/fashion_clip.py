@@ -1,5 +1,4 @@
 import os
-import clip
 import torch
 import numpy as np
 from tqdm import tqdm
@@ -42,7 +41,7 @@ class FCLIPDataset:
     # Can initialize as
     # 1. Existing remotely stored catalog (i.e. the one from FF).
     # 2. Specific a new catalog with path to images + corresponding text
-    def __init__(self, name: str, image_source_path: str, image_source_type: str,  catalog: List[dict] = None ):
+    def __init__(self, name: str, image_source_path: str, image_source_type: str,  catalog: List[dict] = None):
 
         image_source_type = image_source_type.upper()
         assert image_source_type in ['LOCAL', 'S3', 'URL']
