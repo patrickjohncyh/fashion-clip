@@ -9,3 +9,4 @@ annoy==1.17.0
 transformers==4.26.1
 ipyplot==1.1.1
 datasets==2.10.0
+validators

@@ -8,7 +8,7 @@ with open('README.md') as readme_file:
 
 setup(
     name='fashion-clip',
-    version='0.1.2',
+    version='0.2.0',
     description='',
     python_requires='>=3.5',
     classifiers=[
