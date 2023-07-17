@@ -2,7 +2,9 @@
 
 [![Youtube Video](https://img.shields.io/badge/youtube-video-red)](https://www.youtube.com/watch?v=uqRSc-KSA1Y)
 [![HuggingFace Model](https://img.shields.io/badge/HF%20Model-Weights-yellow)](https://huggingface.co/patrickjohncyh/fashion-clip)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1Z1hAxBnWjF76bEi9KQ6CMBBEmI_FVDrW?usp=sharing)
 [![Medium Blog Post](https://raw.githubusercontent.com/aleen42/badges/master/src/medium.svg)](https://towardsdatascience.com/teaching-clip-some-fashion-3005ac3fdcc3)
+[![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://huggingface.co/spaces/vinid/fashion-clip-app)
 
 
 ## Quick Start
