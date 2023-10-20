@@ -214,3 +214,7 @@ fclip = FashionCLIP('fasihon-clip', ff_dataset)
 
 For further details on how to use the package, refer to the accompanying notebook!
 
+## Fun Related Projects!
+
+* Check [RustEmbed](https://github.com/yaman/RustEmbed) for an application to use gRPC to create embeddings with FashionCLIP.
+
