@@ -103,7 +103,7 @@ class FashionCLIP:
     """
 
     def __init__(self, model_name, dataset: FCLIPDataset = None, normalize=True, approx=True, auth_token=None):
-        self.device = "cuda" if torch.cuda.is_available() else "cpu"
+        self.device = self._get_device()
         self.model_name = model_name
         self.model, self.preprocess, self.model_hash = self._load_model(model_name, auth_token=auth_token)
         self.model = self.model.to(self.device)
@@ -130,6 +130,15 @@ class FashionCLIP:
                 self.nn_index.add_item(idx, v)
             self.nn_index.build(50)  # 10 trees
             print('Done!')
+
+    @classmethod
+    def _get_device(cls):
+        if torch.backends.mps.is_available():
+            return "mps"
+        elif torch.cuda.is_available():
+            return "cuda"
+        else: 
+            return "cpu"
 
     def _generate_vectors(self, cache=True):
 
