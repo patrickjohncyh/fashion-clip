@@ -1,5 +1,6 @@
 import os
 import torch
+import logging
 import numpy as np
 from tqdm import tqdm
 from typing import List, Union, Tuple
@@ -134,12 +135,15 @@ class FashionCLIP:
     @classmethod
     def _get_device(cls):
         if torch.backends.mps.is_available():
-            return "mps"
+            d = "mps"
         elif torch.cuda.is_available():
-            return "cuda"
+            d = "cuda"
         else: 
-            return "cpu"
-
+            d = "cpu"
+        
+        logging.info('using acceleration device %s', d)
+        return d
+    
     def _generate_vectors(self, cache=True):
 
         # check if dataset + model embedding exists
