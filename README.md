@@ -15,7 +15,7 @@
 | Tutorial -  FashionCLIP Evaluation with RecList | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1ek-TIT1ZJta59-O73GaXsOINvt46dnkz?usp=sharing)|
 
 
-UPDATE (10/03/23): We have updated the model! We found that [laion/CLIP-ViT-B-32-laion2B-s34B-b79K](https://huggingface.co/laion/CLIP-ViT-B-32-laion2B-s34B-b79K) checkpoint (thanks [Bin](https://www.linkedin.com/in/bin-duan-56205310/)!) worked better than original OpenAI CLIP on Fashion. We thus fine-tune a newer (and better!) version of FashionCLIP (henceforth FashionCLIP 2.0), while keeping the architecture the same. We postulate that the perofrmance gains afforded by `laion/CLIP-ViT-B-32-laion2B-s34B-b79K` are due to the increased training data (5x OpenAI CLIP data). Our [thesis](https://www.nature.com/articles/s41598-022-23052-9), however, remains the same -- fine-tuning `laion/CLIP` on our fashion dataset improved zero-shot perofrmance across our benchmarks. See the below table comparing weighted macro F1 score across models.
+UPDATE (10/03/23): We have updated the model! We found that [laion/CLIP-ViT-B-32-laion2B-s34B-b79K](https://huggingface.co/laion/CLIP-ViT-B-32-laion2B-s34B-b79K) checkpoint (thanks [Bin](https://www.linkedin.com/in/bin-duan-56205310/)!) worked better than original OpenAI CLIP on Fashion. We thus fine-tune a newer (and better!) version of FashionCLIP (henceforth FashionCLIP 2.0), while keeping the architecture the same. We postulate that the performance gains afforded by `laion/CLIP-ViT-B-32-laion2B-s34B-b79K` are due to the increased training data (5x OpenAI CLIP data). Our [thesis](https://www.nature.com/articles/s41598-022-23052-9), however, remains the same -- fine-tuning `laion/CLIP` on our fashion dataset improved zero-shot perofrmance across our benchmarks. See the below table comparing weighted macro F1 score across models.
 `
 
 | Model             | FMNIST        | KAGL          | DEEP          | 
@@ -166,7 +166,7 @@ image_source_type: str -> type of source (i.e. local or s3)
 catalog: List[dict] = None -> list of dicts containing at miniumum the keys ['id', 'image', 'caption']
 ```
 
-For ease of use, the API also provides access to the dataset (_once it is officialy released_), used in the paper 
+For ease of use, the API also provides access to the dataset (_once it is officially released_), used in the paper 
 for training `FahionCLIP`, by simply specifying the corresponding catalog name.
 
 #### Pre-Included Dataset
